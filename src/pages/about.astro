@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="关于"
+	description="Rushing's travel of Mr.Wang — 从 RecoBlog 迁移到 Astro 的个人博客。"
+	pubDate={new Date('2023-01-01')}
+	tags={[]}
+>
+	<p>
+		这里是 <strong>Rushing's travel of Mr.Wang</strong>，文章来自原先的 VuePress
+		站点 RecoBlog，现已迁移为 Astro 静态博客，方便本地预览，以及之后自行部署到
+		Vercel、Netlify 或其他静态托管。
+	</p>
+	<p>
+		分类沿用原仓库目录：图库、杂记、算法、记录、运维。图库里的图片使用 GitHub
+		raw 链接，无需再拷贝本地资源。
+	</p>
+	<p>
+		源码仓库：
+		<a href="https://github.com/W-David/RecoBlog" target="_blank" rel="noopener noreferrer"
+			>W-David/RecoBlog</a
+		>
+	</p>
+</Layout>
