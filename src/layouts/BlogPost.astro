@@ -1,118 +1,139 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
+import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage, category, tags } = Astro.props;
 ---
 
-<html lang="zh-CN">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.prose :global(img) {
-				max-width: 100%;
-				height: auto;
-				border-radius: 8px;
-			}
-			.prose :global(blockquote) {
-				border-left: 4px solid var(--accent);
-				margin: 1.2em 0;
-				padding: 0.2em 0 0.2em 1em;
-				color: rgb(var(--gray));
-				background: rgba(var(--gray-light), 0.35);
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1.2;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-				font-size: 2.2rem;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-			.badges {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.5rem;
-				justify-content: center;
-				margin-bottom: 0.75rem;
-			}
-			.badge {
-				display: inline-block;
-				padding: 0.15rem 0.6rem;
-				border-radius: 999px;
-				background: rgba(var(--gray-light), 0.9);
-				color: rgb(var(--gray-dark));
-				font-size: 0.85rem;
-			}
-		</style>
-	</head>
-
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+<BaseLayout title={title} description={description}>
+	<main>
+		<article class="site-shell article">
+			<header class="hero glass reveal reveal-scale">
+				<div class="meta">
+					{category && <span class="badge">{category}</span>}
+					<span class="date"><FormattedDate date={pubDate} /></span>
+					{updatedDate && (
+						<span class="date">更新于 <FormattedDate date={updatedDate} /></span>
+					)}
 				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										更新于 <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<div class="badges">
-							{category && <span class="badge">{category}</span>}
-							{tags?.map((tag) => <span class="badge">#{tag}</span>)}
-						</div>
-						<h1>{title}</h1>
-						<hr />
+				<h1>{title}</h1>
+				<p class="desc">{description}</p>
+				{(tags?.length ?? 0) > 0 && (
+					<div class="tags">
+						{tags.map((tag) => <span class="badge">#{tag}</span>)}
 					</div>
-					<slot />
+				)}
+			</header>
+
+			{heroImage && (
+				<div class="cover reveal" data-delay="80">
+					<Image width={1200} height={630} src={heroImage} alt="" />
 				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+			)}
+
+			<div class="prose glass reveal" data-delay="120">
+				<slot />
+			</div>
+
+			<div class="back reveal">
+				<a href="/blog">← 返回文章列表</a>
+			</div>
+		</article>
+	</main>
+</BaseLayout>
+
+<style>
+	.article {
+		padding: 2.5rem 0 3rem;
+		max-width: 860px;
+	}
+	.hero {
+		padding: 2rem 1.6rem;
+		border-radius: 24px;
+		margin-bottom: 1.25rem;
+	}
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		align-items: center;
+		margin-bottom: 1rem;
+		color: var(--text-muted);
+		font-size: 0.9rem;
+	}
+	.desc {
+		color: var(--text-muted);
+		margin: 0 0 1rem;
+		font-size: 1.05rem;
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+	}
+	.cover {
+		margin-bottom: 1.25rem;
+		border-radius: 18px;
+		overflow: hidden;
+		border: 1px solid var(--border);
+	}
+	.cover :global(img) {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 0;
+	}
+	.prose {
+		padding: 1.6rem 1.5rem 2rem;
+		border-radius: 22px;
+		color: #d7e0f5;
+		letter-spacing: 0.01em;
+	}
+	.prose :global(h2),
+	.prose :global(h3),
+	.prose :global(h4) {
+		margin-top: 1.6em;
+	}
+	.prose :global(img) {
+		display: block;
+		margin: 1.1rem auto;
+		border: 1px solid rgba(125, 211, 252, 0.18);
+		box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+	}
+	.prose :global(a) {
+		color: #7dd3fc;
+	}
+	.prose :global(ul),
+	.prose :global(ol) {
+		padding-left: 1.25rem;
+	}
+	.prose :global(li) {
+		margin: 0.35rem 0;
+	}
+	.prose :global(table) {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 1.2rem 0;
+		font-size: 0.92rem;
+	}
+	.prose :global(th),
+	.prose :global(td) {
+		border: 1px solid var(--border);
+		padding: 0.5rem 0.65rem;
+	}
+	.back {
+		margin-top: 1.5rem;
+	}
+	.back a {
+		text-decoration: none;
+		color: var(--accent);
+		font-weight: 600;
+	}
+	@media (max-width: 640px) {
+		.hero, .prose { padding-inline: 1.1rem; }
+	}
+</style>

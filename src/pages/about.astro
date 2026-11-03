@@ -1,26 +1,54 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../consts';
 ---
 
-<Layout
-	title="关于"
-	description="Rushing's travel of Mr.Wang — 从 RecoBlog 迁移到 Astro 的个人博客。"
-	pubDate={new Date('2023-01-01')}
-	tags={[]}
->
-	<p>
-		这里是 <strong>Rushing's travel of Mr.Wang</strong>，文章来自原先的 VuePress
-		站点 RecoBlog，现已迁移为 Astro 静态博客，方便本地预览，以及之后自行部署到
-		Vercel、Netlify 或其他静态托管。
-	</p>
-	<p>
-		分类沿用原仓库目录：图库、杂记、算法、记录、运维。图库里的图片使用 GitHub
-		raw 链接，无需再拷贝本地资源。
-	</p>
-	<p>
-		源码仓库：
-		<a href="https://github.com/W-David/RecoBlog" target="_blank" rel="noopener noreferrer"
-			>W-David/RecoBlog</a
-		>
-	</p>
-</Layout>
+<BaseLayout title={`关于 · ${SITE_TITLE}`} description="关于 Rushing's travel of Mr.Wang">
+	<main class="site-shell">
+		<article class="panel glass reveal reveal-scale">
+			<p class="eyebrow">About</p>
+			<h1>关于本站</h1>
+			<p>
+				这里是 <strong>Rushing's travel of Mr.Wang</strong>。文章来自原先的 VuePress
+				站点 RecoBlog，现已迁移为自定义 Astro 主题「Neon Aurora」，支持 Markdown 内容集合、
+				SEO / RSS，以及滚动渐入动画。
+			</p>
+			<p>
+				分类沿用原仓库目录：图库、杂记、算法、记录、运维。图库图片使用 GitHub raw 链接。
+			</p>
+			<p>
+				源码：
+				<a href="https://github.com/W-David/astro-blog" target="_blank" rel="noopener noreferrer">W-David/astro-blog</a>
+				· 旧站：
+				<a href="https://github.com/W-David/RecoBlog" target="_blank" rel="noopener noreferrer">W-David/RecoBlog</a>
+			</p>
+			<a class="btn" href="/blog">去看文章 →</a>
+		</article>
+	</main>
+</BaseLayout>
+
+<style>
+	main { padding: 3rem 0 4rem; max-width: 820px; }
+	.panel {
+		padding: 2rem 1.6rem;
+		border-radius: 24px;
+	}
+	.eyebrow {
+		margin: 0 0 0.6rem;
+		color: var(--accent);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		font-size: 0.85rem;
+		font-weight: 700;
+	}
+	.btn {
+		display: inline-flex;
+		margin-top: 0.75rem;
+		padding: 0.65rem 1.1rem;
+		border-radius: 999px;
+		text-decoration: none;
+		color: #041018;
+		font-weight: 700;
+		background: linear-gradient(135deg, #7dd3fc, #a78bfa);
+	}
+</style>

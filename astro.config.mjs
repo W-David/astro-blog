@@ -8,6 +8,12 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
 	site: 'https://rushwang.blog',
 	integrations: [mdx(), sitemap()],
+	markdown: {
+		shikiConfig: {
+			theme: 'github-dark-dimmed',
+			wrap: true,
+		},
+	},
 	fonts: [
 		{
 			provider: fontProviders.local(),
