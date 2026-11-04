@@ -3,30 +3,20 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-	<div class="site-shell footer-inner reveal">
-		<p>© {year} Mr.Wang · Rushing's travel of Mr.Wang</p>
-		<p class="muted">Neon Aurora · Astro content collections</p>
-		<a href="https://github.com/W-David/astro-blog" target="_blank" rel="noopener noreferrer">GitHub</a>
+	<div class="site-shell">
+		<p>© {year} Mr.Wang</p>
 	</div>
 </footer>
 
 <style>
 	.site-footer {
-		padding: 3.5rem 0 4.5rem;
-		margin-top: 3rem;
-		border-top: 1px solid rgba(148, 163, 255, 0.12);
+		margin-top: auto;
+		padding: 2.5rem 0 2.5rem;
+		border-top: 1px solid var(--line);
+		color: var(--muted);
+		font-size: 0.9rem;
 	}
-	.footer-inner {
-		text-align: center;
-		color: var(--text-muted);
-		font-size: 0.92rem;
-	}
-	.footer-inner p { margin: 0.25rem 0; }
-	.muted { opacity: 0.75; }
-	.footer-inner a {
-		display: inline-block;
-		margin-top: 0.85rem;
-		text-decoration: none;
-		color: var(--accent);
+	.site-footer p {
+		margin: 0;
 	}
 </style>

@@ -10,36 +10,26 @@ const posts = (await getCollection('blog')).sort(
 ---
 
 <BaseLayout title={`文章 · ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
-	<main class="site-shell">
-		<header class="page-head reveal">
-			<p class="eyebrow">Archive</p>
-			<h1>全部文章</h1>
-			<p class="lead">共 {posts.length} 篇 · 向下滚动查看更多</p>
+	<main class="site-shell archive">
+		<header class="page-head">
+			<h1>文章</h1>
+			<p>{posts.length} 篇</p>
 		</header>
-		<div class="grid">
-			{posts.map((post, i) => <PostCard post={post} index={i} />)}
-		</div>
+		<ul class="post-list">
+			{posts.map((post) => <PostCard post={post} />)}
+		</ul>
 	</main>
 </BaseLayout>
 
 <style>
-	main { padding: 3rem 0 4rem; }
-	.page-head { margin-bottom: 1.75rem; }
-	.eyebrow {
-		margin: 0 0 0.5rem;
-		color: var(--accent);
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		font-size: 0.85rem;
-		font-weight: 700;
+	.archive {
+		padding: 2.75rem 0 1rem;
 	}
-	.lead { color: var(--text-muted); margin: 0; }
-	.grid {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 1rem;
+	.page-head {
+		margin-bottom: 0.5rem;
 	}
-	@media (max-width: 700px) {
-		.grid { grid-template-columns: 1fr; }
+	.page-head p {
+		margin: 0;
+		color: var(--muted);
 	}
 </style>

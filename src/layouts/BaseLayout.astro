@@ -18,57 +18,8 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 		<BaseHead title={title} description={description} />
 	</head>
 	<body>
-		<div class="ambient" aria-hidden="true">
-			<span class="orb orb-a"></span>
-			<span class="orb orb-b"></span>
-			<span class="orb orb-c"></span>
-		</div>
 		<Header />
 		<slot />
 		<Footer />
-		<script>
-			import { initReveal } from '../scripts/reveal';
-			initReveal();
-			document.addEventListener('astro:page-load', initReveal);
-		</script>
 	</body>
 </html>
-
-<style is:global>
-	.ambient {
-		position: fixed;
-		inset: 0;
-		pointer-events: none;
-		z-index: -1;
-		overflow: hidden;
-	}
-	.orb {
-		position: absolute;
-		border-radius: 50%;
-		filter: blur(40px);
-		animation: float-orb 14s ease-in-out infinite, pulse-glow 6s ease-in-out infinite;
-	}
-	.orb-a {
-		width: 280px;
-		height: 280px;
-		top: 12%;
-		left: -40px;
-		background: rgba(125, 211, 252, 0.28);
-	}
-	.orb-b {
-		width: 360px;
-		height: 360px;
-		top: 35%;
-		right: -80px;
-		background: rgba(167, 139, 250, 0.24);
-		animation-delay: -4s;
-	}
-	.orb-c {
-		width: 240px;
-		height: 240px;
-		bottom: 8%;
-		left: 35%;
-		background: rgba(52, 211, 153, 0.16);
-		animation-delay: -7s;
-	}
-</style>

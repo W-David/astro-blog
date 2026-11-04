@@ -4,79 +4,18 @@ import FormattedDate from './FormattedDate.astro';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
-	index?: number;
 }
 
-const { post, index = 0 } = Astro.props;
-const delay = Math.min(index * 70, 420);
+const { post } = Astro.props;
 ---
 
-<a class="card glass reveal" href={`/blog/${post.id}/`} data-delay={delay} style={`--i:${index}`}>
-	<div class="meta">
-		{post.data.category && <span class="badge">{post.data.category}</span>}
-		<span class="date"><FormattedDate date={post.data.pubDate} /></span>
-	</div>
-	<h2>{post.data.title}</h2>
-	<p>{post.data.description}</p>
-	<span class="cta">阅读 →</span>
-</a>
-
-<style>
-	.card {
-		display: block;
-		text-decoration: none;
-		color: inherit;
-		padding: 1.35rem 1.4rem 1.25rem;
-		border-radius: var(--radius);
-		position: relative;
-		overflow: hidden;
-		transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.35s ease;
-	}
-	.card::before {
-		content: "";
-		position: absolute;
-		inset: auto -20% -40% 20%;
-		height: 60%;
-		background: radial-gradient(circle, rgba(125, 211, 252, 0.22), transparent 65%);
-		opacity: 0;
-		transition: opacity 0.35s ease;
-		pointer-events: none;
-	}
-	.card:hover {
-		transform: translateY(-6px) scale(1.01);
-		border-color: var(--border-strong);
-		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 36px rgba(125, 211, 252, 0.18);
-		text-shadow: none;
-		color: inherit;
-	}
-	.card:hover::before { opacity: 1; }
-	.meta {
-		display: flex;
-		align-items: center;
-		gap: 0.7rem;
-		margin-bottom: 0.75rem;
-		flex-wrap: wrap;
-	}
-	.date {
-		color: var(--text-muted);
-		font-size: 0.85rem;
-	}
-	h2 {
-		margin: 0 0 0.5rem;
-		font-size: 1.28rem;
-		color: #f4f7ff;
-	}
-	p {
-		margin: 0;
-		color: var(--text-muted);
-		font-size: 0.95rem;
-		line-height: 1.55;
-	}
-	.cta {
-		display: inline-block;
-		margin-top: 1rem;
-		color: var(--accent);
-		font-size: 0.9rem;
-		font-weight: 600;
-	}
-</style>
+<li>
+	<a href={`/blog/${post.id}/`}>
+		<div class="meta">
+			<span class="date"><FormattedDate date={post.data.pubDate} /></span>
+			{post.data.category && <span>{post.data.category}</span>}
+		</div>
+		<h2>{post.data.title}</h2>
+		{post.data.description && <p>{post.data.description}</p>}
+	</a>
+</li>

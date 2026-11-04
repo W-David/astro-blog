@@ -12,35 +12,30 @@ const { title, description, pubDate, updatedDate, heroImage, category, tags } = 
 <BaseLayout title={title} description={description}>
 	<main>
 		<article class="site-shell article">
-			<header class="hero glass reveal reveal-scale">
+			<p class="back"><a href="/blog">文章</a></p>
+			<header>
 				<div class="meta">
-					{category && <span class="badge">{category}</span>}
-					<span class="date"><FormattedDate date={pubDate} /></span>
+					<span><FormattedDate date={pubDate} /></span>
+					{category && <span>{category}</span>}
 					{updatedDate && (
-						<span class="date">更新于 <FormattedDate date={updatedDate} /></span>
+						<span>更新于 <FormattedDate date={updatedDate} /></span>
 					)}
 				</div>
 				<h1>{title}</h1>
-				<p class="desc">{description}</p>
+				{description && <p class="desc">{description}</p>}
 				{(tags?.length ?? 0) > 0 && (
-					<div class="tags">
-						{tags.map((tag) => <span class="badge">#{tag}</span>)}
-					</div>
+					<p class="tags">{tags.map((tag) => `#${tag}`).join('  ')}</p>
 				)}
 			</header>
 
 			{heroImage && (
-				<div class="cover reveal" data-delay="80">
+				<div class="cover">
 					<Image width={1200} height={630} src={heroImage} alt="" />
 				</div>
 			)}
 
-			<div class="prose glass reveal" data-delay="120">
+			<div class="prose">
 				<slot />
-			</div>
-
-			<div class="back reveal">
-				<a href="/blog">← 返回文章列表</a>
 			</div>
 		</article>
 	</main>
@@ -48,50 +43,49 @@ const { title, description, pubDate, updatedDate, heroImage, category, tags } = 
 
 <style>
 	.article {
-		padding: 2.5rem 0 3rem;
-		max-width: 860px;
+		padding: 2.25rem 0 1rem;
 	}
-	.hero {
-		padding: 2rem 1.6rem;
-		border-radius: 24px;
-		margin-bottom: 1.25rem;
-	}
-	.meta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.65rem;
-		align-items: center;
-		margin-bottom: 1rem;
-		color: var(--text-muted);
+	.back {
+		margin: 0 0 1.25rem;
 		font-size: 0.9rem;
 	}
-	.desc {
-		color: var(--text-muted);
-		margin: 0 0 1rem;
-		font-size: 1.05rem;
+	.back a {
+		color: var(--muted);
+		text-decoration: none;
 	}
+	.back a:hover {
+		color: var(--text);
+		text-decoration: underline;
+	}
+	.meta,
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.45rem;
+		gap: 0.65rem;
+		margin: 0 0 0.6rem;
+		color: var(--muted);
+		font-size: 0.88rem;
+	}
+	.tags {
+		display: block;
+		margin-bottom: 0;
+	}
+	.desc {
+		color: var(--muted);
+		margin: 0.75rem 0 0;
 	}
 	.cover {
-		margin-bottom: 1.25rem;
-		border-radius: 18px;
-		overflow: hidden;
-		border: 1px solid var(--border);
+		margin: 1.5rem 0 0;
 	}
 	.cover :global(img) {
 		display: block;
 		width: 100%;
 		height: auto;
-		border-radius: 0;
+		border-radius: 4px;
 	}
 	.prose {
-		padding: 1.6rem 1.5rem 2rem;
-		border-radius: 22px;
-		color: #d7e0f5;
-		letter-spacing: 0.01em;
+		margin-top: 1.75rem;
+		padding-top: 0.25rem;
 	}
 	.prose :global(h2),
 	.prose :global(h3),
@@ -101,18 +95,17 @@ const { title, description, pubDate, updatedDate, heroImage, category, tags } = 
 	.prose :global(img) {
 		display: block;
 		margin: 1.1rem auto;
-		border: 1px solid rgba(125, 211, 252, 0.18);
-		box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+		border-radius: 4px;
 	}
 	.prose :global(a) {
-		color: #7dd3fc;
+		color: var(--text);
 	}
 	.prose :global(ul),
 	.prose :global(ol) {
 		padding-left: 1.25rem;
 	}
 	.prose :global(li) {
-		margin: 0.35rem 0;
+		margin: 0.3rem 0;
 	}
 	.prose :global(table) {
 		width: 100%;
@@ -122,18 +115,9 @@ const { title, description, pubDate, updatedDate, heroImage, category, tags } = 
 	}
 	.prose :global(th),
 	.prose :global(td) {
-		border: 1px solid var(--border);
-		padding: 0.5rem 0.65rem;
-	}
-	.back {
-		margin-top: 1.5rem;
-	}
-	.back a {
-		text-decoration: none;
-		color: var(--accent);
-		font-weight: 600;
-	}
-	@media (max-width: 640px) {
-		.hero, .prose { padding-inline: 1.1rem; }
+		border-bottom: 1px solid var(--line);
+		padding: 0.45rem 0.4rem;
+		text-align: left;
+		vertical-align: top;
 	}
 </style>
