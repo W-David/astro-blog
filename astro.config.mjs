@@ -10,32 +10,61 @@ export default defineConfig({
 	integrations: [mdx(), sitemap()],
 	markdown: {
 		shikiConfig: {
-			theme: 'github-light',
+			theme: 'github-dark-dimmed',
 			wrap: true,
 		},
 	},
 	fonts: [
 		{
 			provider: fontProviders.local(),
-			name: 'Atkinson',
-			cssVariable: '--font-atkinson',
-			fallbacks: [
-				'"Noto Sans SC"',
-				'"PingFang SC"',
-				'"Microsoft YaHei"',
-				'sans-serif',
-			],
+			name: 'Space Grotesk',
+			cssVariable: '--font-space-grotesk',
+			fallbacks: ['"PingFang SC"', '"Noto Sans SC"', '"Microsoft YaHei"', 'sans-serif'],
 			options: {
 				variants: [
 					{
-						src: ['./src/assets/fonts/atkinson-regular.woff'],
-						weight: 400,
+						src: ['./src/assets/fonts/space-grotesk-300.ttf'],
+						weight: '300',
 						style: 'normal',
 						display: 'swap',
 					},
 					{
-						src: ['./src/assets/fonts/atkinson-bold.woff'],
-						weight: 700,
+						src: ['./src/assets/fonts/space-grotesk-400.ttf'],
+						weight: '400',
+						style: 'normal',
+						display: 'swap',
+					},
+					{
+						src: ['./src/assets/fonts/space-grotesk-500.ttf'],
+						weight: '500',
+						style: 'normal',
+						display: 'swap',
+					},
+				],
+			},
+		},
+		{
+			provider: fontProviders.local(),
+			name: 'Fraunces',
+			cssVariable: '--font-fraunces',
+			fallbacks: ['"Songti SC"', '"STSong"', 'serif'],
+			options: {
+				variants: [
+					{
+						src: ['./src/assets/fonts/fraunces-400.ttf'],
+						weight: '400',
+						style: 'normal',
+						display: 'swap',
+					},
+					{
+						src: ['./src/assets/fonts/fraunces-400-italic.ttf'],
+						weight: '400',
+						style: 'italic',
+						display: 'swap',
+					},
+					{
+						src: ['./src/assets/fonts/fraunces-700.ttf'],
+						weight: '700',
 						style: 'normal',
 						display: 'swap',
 					},

@@ -2,6 +2,7 @@
 title: "nginx部署多个前端项目"
 description: "同一域名下部署多个前端项目的两种 Nginx 方案。"
 pubDate: 2021-05-05
+heroImage: ../../assets/images/post-code.jpg
 category: "运维"
 tags:
   - "nginx"

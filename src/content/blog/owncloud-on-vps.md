@@ -2,6 +2,7 @@
 title: "用VPS搭建ownCloud私有云"
 description: "用 Docker 在 VPS 上搭建 ownCloud 私有云。"
 pubDate: 2019-08-19
+heroImage: ../../assets/images/post-matrix.jpg
 category: "运维"
 tags:
   - "vps"
@@ -21,9 +22,10 @@ tags:
 ```sh
 uname -r
 3.10.0-957.27.2.el7.x86_64
+```
+
 ```sh
 # 删除自带的docker,如果有的话
-```sh
 yum erase docker -y
 ```
 * 安装一些必要的系统工具：
@@ -94,4 +96,3 @@ FLUSH PRIVILEGES;
 ```sh
 docker restart own-mysql
 ```
-# END

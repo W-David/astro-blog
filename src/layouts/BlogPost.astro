@@ -3,121 +3,334 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import FallbackImage from '../assets/images/hero-night.jpg';
 
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage, category, tags } = Astro.props;
+const cover = heroImage ?? FallbackImage;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} image={cover} type="article">
+	<div class="read-progress" aria-hidden="true"><span data-progress></span></div>
 	<main>
-		<article class="site-shell article">
-			<p class="back"><a href="/blog">文章</a></p>
-			<header>
-				<div class="meta">
-					<span><FormattedDate date={pubDate} /></span>
-					{category && <span>{category}</span>}
-					{updatedDate && (
-						<span>更新于 <FormattedDate date={updatedDate} /></span>
+		<article>
+			<header class="essay-hero">
+				<div class="essay-media">
+					<Image
+						src={cover}
+						alt={title}
+						width={2000}
+						height={1333}
+						loading="eager"
+						fetchpriority="high"
+					/>
+				</div>
+				<div class="essay-shade" aria-hidden="true"></div>
+
+				<div class="essay-hero__inner shell">
+					<a class="essay-back" href="/blog"><span aria-hidden="true">←</span> All notes</a>
+					<div class="essay-meta">
+						{category && <span>{category}</span>}
+						<span><FormattedDate date={pubDate} /></span>
+						{updatedDate && <span>更新于 <FormattedDate date={updatedDate} /></span>}
+					</div>
+					<h1>{title}</h1>
+					{description && <p class="essay-desc">{description}</p>}
+					{(tags?.length ?? 0) > 0 && (
+						<ul class="essay-tags" aria-label="文章标签">
+							{tags.map((tag) => <li>#{tag}</li>)}
+						</ul>
 					)}
 				</div>
-				<h1>{title}</h1>
-				{description && <p class="desc">{description}</p>}
-				{(tags?.length ?? 0) > 0 && (
-					<p class="tags">{tags.map((tag) => `#${tag}`).join('  ')}</p>
-				)}
 			</header>
 
-			{heroImage && (
-				<div class="cover">
-					<Image width={1200} height={630} src={heroImage} alt="" />
+			<div class="essay-body">
+				<div class="prose">
+					<slot />
 				</div>
-			)}
 
-			<div class="prose">
-				<slot />
+				<footer class="essay-foot">
+					<a class="essay-foot__back" href="/blog"><span aria-hidden="true">←</span> 返回全部笔记</a>
+					<p>Written by Mr.Wang · Rushing's travel of Mr.Wang</p>
+				</footer>
 			</div>
 		</article>
 	</main>
 </BaseLayout>
 
 <style>
-	.article {
-		padding: 2.25rem 0 1rem;
+	.read-progress {
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		z-index: 120;
+		height: 1px;
+		background: rgba(243, 239, 230, 0.08);
 	}
-	.back {
-		margin: 0 0 1.25rem;
-		font-size: 0.9rem;
+
+	.read-progress span {
+		display: block;
+		width: 0;
+		height: 100%;
+		background: linear-gradient(90deg, var(--warm), var(--lavender) 52%, var(--cyan));
 	}
-	.back a {
-		color: var(--muted);
-		text-decoration: none;
+
+	.essay-hero {
+		position: relative;
+		display: flex;
+		align-items: flex-end;
+		height: 88vh;
+		height: 88svh;
+		min-height: 610px;
+		max-height: 940px;
+		overflow: hidden;
+		padding: 0 0 clamp(40px, 6vw, 72px);
 	}
-	.back a:hover {
-		color: var(--text);
-		text-decoration: underline;
+
+	.essay-media,
+	.essay-shade {
+		position: absolute;
+		inset: 0;
 	}
-	.meta,
-	.tags {
+
+	.essay-media :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 42%;
+		filter: brightness(0.64) saturate(0.8) contrast(1.03);
+	}
+
+	.essay-shade {
+		background:
+			radial-gradient(780px 520px at 82% 12%, rgba(255, 184, 140, 0.17), transparent 65%),
+			linear-gradient(180deg, rgba(8, 9, 13, 0.5) 0%, rgba(8, 9, 13, 0.08) 35%, rgba(8, 9, 13, 0.92) 100%);
+	}
+
+	.essay-hero__inner {
+		position: relative;
+		z-index: 2;
+		width: min(var(--shell), calc(100% - var(--gutter) * 2));
+	}
+
+	.essay-back {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		margin-bottom: clamp(24px, 4vw, 48px);
+		color: rgba(243, 239, 230, 0.6);
+		font-family: var(--mono);
+		font-size: 9px;
+		letter-spacing: 0.13em;
+		text-transform: uppercase;
+	}
+
+	.essay-back:hover {
+		color: var(--warm);
+	}
+
+	.essay-meta {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.65rem;
-		margin: 0 0 0.6rem;
-		color: var(--muted);
-		font-size: 0.88rem;
+		gap: 8px 28px;
+		padding-top: 15px;
+		border-top: 1px solid rgba(243, 239, 230, 0.22);
+		color: rgba(243, 239, 230, 0.62);
+		font-family: var(--mono);
+		font-size: 9px;
+		letter-spacing: 0.12em;
+		line-height: 1.7;
+		text-transform: uppercase;
 	}
-	.tags {
-		display: block;
-		margin-bottom: 0;
+
+	.essay-meta span:first-child {
+		color: var(--warm);
 	}
-	.desc {
-		color: var(--muted);
-		margin: 0.75rem 0 0;
+
+	.essay-hero h1 {
+		max-width: 1260px;
+		margin: clamp(20px, 3vw, 34px) 0 18px;
+		font-size: clamp(3.4rem, 8.8vw, 9.6rem);
+		font-weight: 300;
+		line-height: 0.96;
+		letter-spacing: -0.06em;
+		text-wrap: balance;
 	}
-	.cover {
-		margin: 1.5rem 0 0;
+
+	.essay-desc {
+		max-width: 660px;
+		margin: 0;
+		color: rgba(243, 239, 230, 0.7);
+		font-size: clamp(14px, 1.2vw, 17px);
+		line-height: 1.95;
 	}
-	.cover :global(img) {
-		display: block;
-		width: 100%;
-		height: auto;
-		border-radius: 4px;
+
+	.essay-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 7px 18px;
+		margin: 20px 0 0;
+		padding: 0;
+		list-style: none;
+		color: rgba(243, 239, 230, 0.48);
+		font-family: var(--mono);
+		font-size: 8px;
+		letter-spacing: 0.1em;
 	}
+
+	.essay-body {
+		width: min(840px, calc(100% - var(--gutter) * 2));
+		margin: 0 auto;
+		padding: clamp(84px, 11vw, 136px) 0 40px;
+	}
+
 	.prose {
-		margin-top: 1.75rem;
-		padding-top: 0.25rem;
+		color: rgba(231, 227, 218, 0.78);
+		font-size: 17px;
+		font-weight: 300;
+		line-height: 2.05;
 	}
-	.prose :global(h2),
-	.prose :global(h3),
+
+	.prose :global(p) {
+		margin-bottom: 1.55em;
+	}
+
+	.prose :global(h2) {
+		margin: 2.4em 0 0.9em;
+		color: var(--paper);
+		font-size: clamp(1.8rem, 3vw, 2.7rem);
+		font-weight: 300;
+		letter-spacing: -0.045em;
+	}
+
+	.prose :global(h3) {
+		margin: 2em 0 0.7em;
+		color: var(--paper);
+		font-size: 1.35rem;
+		font-weight: 400;
+	}
+
 	.prose :global(h4) {
-		margin-top: 1.6em;
+		margin: 1.8em 0 0.6em;
+		color: var(--paper);
+		font-size: 1.12rem;
+		font-weight: 500;
 	}
-	.prose :global(img) {
-		display: block;
-		margin: 1.1rem auto;
-		border-radius: 4px;
+
+	.prose :global(h1) {
+		margin: 2.4em 0 0.9em;
+		color: var(--paper);
+		font-size: clamp(1.8rem, 3vw, 2.7rem);
+		font-weight: 300;
+		letter-spacing: -0.045em;
 	}
-	.prose :global(a) {
-		color: var(--text);
-	}
+
 	.prose :global(ul),
 	.prose :global(ol) {
-		padding-left: 1.25rem;
+		margin: 1.4em 0;
+		padding-left: 1.3rem;
 	}
+
 	.prose :global(li) {
-		margin: 0.3rem 0;
+		margin: 0.45em 0;
 	}
+
+	.prose :global(li::marker) {
+		color: var(--warm);
+	}
+
+	.prose :global(a) {
+		color: var(--warm);
+		border-bottom: 1px solid rgba(255, 184, 140, 0.38);
+	}
+
+	.prose :global(a:hover) {
+		border-color: var(--warm);
+	}
+
+	.prose :global(img) {
+		margin: 2rem auto;
+		border: 1px solid var(--line);
+	}
+
+	.prose :global(blockquote p:last-child) {
+		margin-bottom: 0;
+	}
+
 	.prose :global(table) {
-		width: 100%;
-		border-collapse: collapse;
-		margin: 1.2rem 0;
-		font-size: 0.92rem;
+		display: block;
+		overflow-x: auto;
 	}
-	.prose :global(th),
-	.prose :global(td) {
+
+	.essay-foot {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 30px;
+		margin-top: clamp(70px, 10vw, 120px);
+		padding-top: 20px;
+		border-top: 1px solid var(--line);
+		color: var(--muted);
+		font-size: 9px;
+		letter-spacing: 0.07em;
+	}
+
+	.essay-foot p {
+		margin: 0;
+		text-align: right;
+	}
+
+	.essay-foot__back {
+		padding-bottom: 4px;
 		border-bottom: 1px solid var(--line);
-		padding: 0.45rem 0.4rem;
-		text-align: left;
-		vertical-align: top;
+		color: var(--paper);
+		font-size: 10px;
+		letter-spacing: 0.12em;
+	}
+
+	.essay-foot__back:hover {
+		border-color: var(--warm);
+		color: var(--warm);
+	}
+
+	@media (max-width: 680px) {
+		.essay-hero {
+			height: 760px;
+			min-height: 760px;
+			padding-bottom: 30px;
+		}
+
+		.essay-hero h1 {
+			font-size: clamp(2.8rem, 13.5vw, 5rem);
+			letter-spacing: -0.055em;
+		}
+
+		.essay-back {
+			margin-bottom: 20px;
+		}
+
+		.essay-desc {
+			font-size: 13px;
+		}
+
+		.essay-body {
+			padding-top: 64px;
+		}
+
+		.prose {
+			font-size: 15.5px;
+			line-height: 2;
+		}
+
+		.essay-foot {
+			display: block;
+		}
+
+		.essay-foot p {
+			margin-top: 18px;
+			text-align: left;
+		}
 	}
 </style>

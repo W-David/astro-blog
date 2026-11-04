@@ -3,20 +3,21 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-	<div class="site-shell">
-		<p>© {year} Mr.Wang</p>
+	<div class="shell footer-inner">
+		<p class="footer-big">Keep the<br /><em>light.</em></p>
+		<div class="footer-links">
+			<a href="https://github.com/W-David/astro-blog" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+			<a href="/rss.xml">RSS ↗</a>
+			<a href="#top">Back to top ↑</a>
+		</div>
+	</div>
+	<div class="shell footer-bottom">
+		<p>© {year} Mr.Wang · Rushing's travel of Mr.Wang</p>
+		<p class="footer-spacer">Built with Astro · 记录代码，也记录光。</p>
+		<nav aria-label="页脚导航">
+			<a href="/">Index</a>
+			<a href="/blog">Notes</a>
+			<a href="/about">About</a>
+		</nav>
 	</div>
 </footer>
-
-<style>
-	.site-footer {
-		margin-top: auto;
-		padding: 2.5rem 0 2.5rem;
-		border-top: 1px solid var(--line);
-		color: var(--muted);
-		font-size: 0.9rem;
-	}
-	.site-footer p {
-		margin: 0;
-	}
-</style>

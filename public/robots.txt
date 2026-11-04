@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rushwang.blog/sitemap-index.xml

@@ -1,21 +1,41 @@
 ---
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import FallbackImage from '../assets/images/hero-night.jpg';
 import FormattedDate from './FormattedDate.astro';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
+	index?: number;
 }
 
-const { post } = Astro.props;
+const { post, index = 0 } = Astro.props;
+const cover = post.data.heroImage ?? FallbackImage;
+const number = String(index + 1).padStart(2, '0');
 ---
 
-<li>
-	<a href={`/blog/${post.id}/`}>
-		<div class="meta">
-			<span class="date"><FormattedDate date={post.data.pubDate} /></span>
-			{post.data.category && <span>{post.data.category}</span>}
-		</div>
-		<h2>{post.data.title}</h2>
-		{post.data.description && <p>{post.data.description}</p>}
+<li class="poster" data-reveal style={`--i:${Math.min(index, 8)}`}>
+	<a class="poster-link" href={`/blog/${post.id}/`} aria-label={`阅读《${post.data.title}》`}>
+		<figure class="poster-media">
+			<Image
+				src={cover}
+				alt={post.data.title}
+				width={1400}
+				height={1750}
+				loading={index < 2 ? 'eager' : 'lazy'}
+				fetchpriority={index === 0 ? 'high' : undefined}
+			/>
+			<span class="poster-shade" aria-hidden="true"></span>
+			<span class="poster-index">{number} / NOTE</span>
+			<figcaption class="poster-caption">
+				<p class="poster-meta">
+					{post.data.category && <span>{post.data.category}</span>}
+					<span><FormattedDate date={post.data.pubDate} /></span>
+				</p>
+				<h2>{post.data.title}</h2>
+				{post.data.description && <p class="poster-desc">{post.data.description}</p>}
+			</figcaption>
+			<span class="poster-arrow" aria-hidden="true">↗</span>
+		</figure>
 	</a>
 </li>

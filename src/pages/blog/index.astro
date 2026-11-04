@@ -7,29 +7,85 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+const categories = [...new Set(posts.map((post) => post.data.category).filter(Boolean))];
 ---
 
 <BaseLayout title={`文章 · ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
-	<main class="site-shell archive">
-		<header class="page-head">
-			<h1>文章</h1>
-			<p>{posts.length} 篇</p>
+	<main>
+		<header class="page-hero shell">
+			<div class="page-hero__top">
+				<p class="kicker">The archive · All notes</p>
+				<p class="page-hero__meta">
+					{String(posts.length).padStart(2, '0')} STORIES<br />
+					{categories.length} CATEGORIES
+				</p>
+			</div>
+			<h1>所有<br /><em>笔记。</em></h1>
+			<p class="archive-lede">从服务器重装到夜里的算法题，<br />按时间倒序排列。</p>
 		</header>
-		<ul class="post-list">
-			{posts.map((post) => <PostCard post={post} />)}
-		</ul>
+
+		<section class="archive shell" aria-label="全部文章">
+			<ol class="poster-grid">
+				{posts.map((post, index) => <PostCard post={post} index={index} />)}
+			</ol>
+			<div class="archive-foot">
+				<p class="kicker">End of archive / 回到开头</p>
+				<a class="back-link" href="/">Back to index <span aria-hidden="true">↗</span></a>
+			</div>
+		</section>
 	</main>
 </BaseLayout>
 
 <style>
+	.archive-lede {
+		margin: 30px 0 0;
+		color: rgba(243, 239, 230, 0.62);
+		font-size: 14px;
+		line-height: 2.05;
+	}
+
 	.archive {
-		padding: 2.75rem 0 1rem;
+		padding-bottom: 10px;
 	}
-	.page-head {
-		margin-bottom: 0.5rem;
+
+	.archive-foot {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 30px;
+		margin-top: clamp(80px, 10vw, 140px);
+		padding-top: 22px;
+		border-top: 1px solid var(--line);
 	}
-	.page-head p {
-		margin: 0;
-		color: var(--muted);
+
+	.back-link {
+		padding-bottom: 4px;
+		border-bottom: 1px solid var(--line);
+		color: var(--paper);
+		font-size: 10px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	.back-link:hover {
+		border-color: var(--warm);
+		color: var(--warm);
+	}
+
+	@media (max-width: 680px) {
+		.archive-lede {
+			margin-top: 22px;
+			font-size: 13px;
+		}
+
+		.archive-foot {
+			display: block;
+			margin-top: 70px;
+		}
+
+		.back-link {
+			display: inline-block;
+			margin-top: 22px;
+		}
 	}
 </style>

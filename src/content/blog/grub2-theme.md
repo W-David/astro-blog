@@ -2,6 +2,7 @@
 title: "Grub2 美化"
 description: "配置 Aurora-Penguinis 等 GRUB2 主题的简要步骤。"
 pubDate: 2019-05-29
+heroImage: ../../assets/images/post-night.jpg
 category: "杂记"
 tags:
   - "grub"

@@ -4,14 +4,12 @@ interface Props {
 }
 
 const { date } = Astro.props;
+const formatted = new Intl.DateTimeFormat('zh-CN', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+	timeZone: 'UTC',
+}).format(date);
 ---
 
-<time datetime={date.toISOString()}>
-	{
-		date.toLocaleDateString('zh-CN', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-		})
-	}
-</time>
+<time datetime={date.toISOString()}>{formatted}</time>

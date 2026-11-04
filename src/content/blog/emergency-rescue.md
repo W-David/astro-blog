@@ -2,6 +2,7 @@
 title: "紧急救援"
 description: "PAT 紧急救援：最短路径与最多救援队。"
 pubDate: 2019-05-16
+heroImage: ../../assets/images/post-aerial.jpg
 category: "算法"
 tags:
   - "PAT"

@@ -2,6 +2,7 @@
 title: "Linux 学习笔记"
 description: "Linux 启动过程与常用命令笔记。"
 pubDate: 2019-06-20
+heroImage: ../../assets/images/post-desk.jpg
 category: "运维"
 tags:
   - "linux"

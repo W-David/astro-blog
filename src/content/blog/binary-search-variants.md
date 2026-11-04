@@ -2,6 +2,7 @@
 title: "二分查找-扩展"
 description: "二分查找及若干边界变种的 C++ 实现。"
 pubDate: 2020-01-23
+heroImage: ../../assets/images/post-stairs.jpg
 category: "算法"
 tags: []
 ---

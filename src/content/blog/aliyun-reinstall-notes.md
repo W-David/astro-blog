@@ -2,6 +2,7 @@
 title: "阿里云重装踩坑记录"
 description: "阿里云误删后重装与环境恢复踩坑记录。"
 pubDate: 2022-12-16
+heroImage: ../../assets/images/post-server.jpg
 category: "记录"
 tags:
   - "阿里云"
