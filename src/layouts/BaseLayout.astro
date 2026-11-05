@@ -3,7 +3,7 @@ import type { ImageMetadata } from 'astro';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import DotMatrixBackground from '../components/DotMatrixBackground.astro';
+import FluidBackground from '../components/FluidBackground.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 interface Props {
@@ -22,7 +22,8 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION, image, type = 'websi
 		<BaseHead title={title} description={description} image={image} type={type} />
 	</head>
 	<body id="top">
-		<DotMatrixBackground />
+		<FluidBackground />
+		<div class="fluid-vignette" aria-hidden="true"></div>
 		<Header />
 		<slot />
 		<Footer />

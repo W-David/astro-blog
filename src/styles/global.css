@@ -380,8 +380,8 @@ td {
 	color: var(--bg);
 }
 
-/* ---------- WebGL dot matrix ---------- */
-.dot-matrix {
+/* ---------- WebGL fluid background ---------- */
+.fluid-background {
 	position: fixed;
 	inset: 0;
 	z-index: 0;
@@ -389,37 +389,42 @@ td {
 	width: 100vw;
 	height: 100vh;
 	pointer-events: none;
-	opacity: 1;
+	opacity: 0.62;
+	filter: saturate(1.45) brightness(0.93);
 }
 
-.dot-matrix-vignette {
+.fluid-vignette {
 	position: fixed;
 	inset: 0;
 	z-index: 0;
 	pointer-events: none;
 	background:
-		radial-gradient(ellipse at 50% 44%, transparent 0%, rgba(8, 9, 13, 0.12) 58%, rgba(8, 9, 13, 0.55) 100%),
-		linear-gradient(180deg, rgba(8, 9, 13, 0.08), rgba(8, 9, 13, 0.16));
+		radial-gradient(ellipse at 50% 42%, transparent 0%, rgba(8, 9, 13, 0.2) 62%, rgba(8, 9, 13, 0.58) 100%),
+		linear-gradient(90deg, rgba(8, 9, 13, 0.42) 0%, rgba(8, 9, 13, 0.08) 44%, transparent 76%),
+		linear-gradient(180deg, rgba(8, 9, 13, 0.1), rgba(8, 9, 13, 0.2)),
+		rgba(8, 9, 13, 0.28);
 }
 
-.dot-matrix-fallback {
+.fluid-fallback {
 	position: fixed;
 	inset: 0;
 	z-index: 0;
 	display: block;
 	pointer-events: none;
-	opacity: 0.55;
-	background-image: radial-gradient(rgba(201, 167, 255, 0.32) 1px, transparent 1.2px);
-	background-size: 17px 17px;
-	-webkit-mask-image: radial-gradient(ellipse at 50% 42%, #000 12%, transparent 78%);
-	mask-image: radial-gradient(ellipse at 50% 42%, #000 12%, transparent 78%);
+	opacity: 0.8;
+	background:
+		radial-gradient(ellipse at 32% 42%, rgba(97, 128, 202, 0.3), transparent 55%),
+		radial-gradient(ellipse at 72% 28%, rgba(195, 217, 255, 0.16), transparent 52%),
+		radial-gradient(ellipse at 56% 86%, rgba(33, 61, 112, 0.5), transparent 62%),
+		#081020;
+	filter: blur(20px);
 }
 
-html.has-webgl .dot-matrix-fallback {
+html.has-webgl .fluid-fallback {
 	display: none;
 }
 
-html.no-webgl .dot-matrix {
+html.no-webgl .fluid-background {
 	display: none;
 }
 

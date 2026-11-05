@@ -1,0 +1,36 @@
+---
+// DeepSeek-style fluid gradient background, adapted from the MIT-licensed
+// "Deepseek新版官网Background组件" by panzhiying-dev.
+---
+
+<canvas class="fluid-background" data-fluid-background aria-hidden="true"></canvas>
+<div class="fluid-fallback" aria-hidden="true"></div>
+
+<script>
+	import { mountBackground } from '../scripts/fluid-background.js';
+
+	const canvas = document.querySelector<HTMLCanvasElement>('[data-fluid-background]');
+	if (canvas) {
+		mountBackground(canvas, {
+			color1: '#102A58',
+			color2: '#5A83D6',
+			color3: '#ECF5FF',
+			speed: 17,
+			scale: 0.44,
+			rotation: -8,
+			offsetX: 0,
+			offsetY: 54,
+			proportion: 54,
+			softness: 100,
+			shapeScale: 9,
+			distortion: 25,
+			swirl: 12,
+			swirlIterations: 9,
+			mouseRadius: 0.14,
+			mouseStrength: 0.48,
+			decay: 0.92,
+			distortBoost: 0.8,
+			swirlBoost: 0.22,
+		});
+	}
+</script>
