@@ -188,7 +188,15 @@ const cover = heroImage ?? FallbackImage;
 	}
 
 	.prose {
-		color: rgba(231, 227, 218, 0.78);
+		position: relative;
+		padding: clamp(24px, 4vw, 48px);
+		border: 1px solid rgba(243, 239, 230, 0.1);
+		border-radius: 3px;
+		background: linear-gradient(180deg, rgba(8, 9, 13, 0.76), rgba(8, 9, 13, 0.62));
+		box-shadow: 0 34px 110px rgba(0, 0, 0, 0.3);
+		-webkit-backdrop-filter: blur(7px);
+		backdrop-filter: blur(7px);
+		color: rgba(231, 227, 218, 0.8);
 		font-size: 17px;
 		font-weight: 300;
 		line-height: 2.05;

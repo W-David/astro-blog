@@ -380,25 +380,47 @@ td {
 	color: var(--bg);
 }
 
-/* ---------- pointer light ---------- */
-.cursor-glow {
+/* ---------- WebGL dot matrix ---------- */
+.dot-matrix {
 	position: fixed;
 	inset: 0;
-	z-index: 55;
+	z-index: 0;
+	display: block;
+	width: 100vw;
+	height: 100vh;
 	pointer-events: none;
-	opacity: 0;
-	background: radial-gradient(
-		520px circle at var(--mx, 50%) var(--my, 50%),
-		rgba(255, 184, 140, 0.1),
-		rgba(201, 167, 255, 0.045) 40%,
-		transparent 70%
-	);
-	mix-blend-mode: screen;
-	transition: opacity 0.8s ease;
+	opacity: 1;
 }
 
-.cursor-glow.is-active {
-	opacity: 1;
+.dot-matrix-vignette {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background:
+		radial-gradient(ellipse at 50% 44%, transparent 0%, rgba(8, 9, 13, 0.12) 58%, rgba(8, 9, 13, 0.55) 100%),
+		linear-gradient(180deg, rgba(8, 9, 13, 0.08), rgba(8, 9, 13, 0.16));
+}
+
+.dot-matrix-fallback {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	display: block;
+	pointer-events: none;
+	opacity: 0.55;
+	background-image: radial-gradient(rgba(201, 167, 255, 0.32) 1px, transparent 1.2px);
+	background-size: 17px 17px;
+	-webkit-mask-image: radial-gradient(ellipse at 50% 42%, #000 12%, transparent 78%);
+	mask-image: radial-gradient(ellipse at 50% 42%, #000 12%, transparent 78%);
+}
+
+html.has-webgl .dot-matrix-fallback {
+	display: none;
+}
+
+html.no-webgl .dot-matrix {
+	display: none;
 }
 
 /* ---------- scrolling reveal ---------- */
@@ -421,6 +443,8 @@ html[data-reveal-ready="true"] [data-reveal].is-visible {
 
 /* ---------- footer ---------- */
 .site-footer {
+	position: relative;
+	z-index: 1;
 	margin-top: 150px;
 	padding: 94px var(--gutter) 30px;
 	border-top: 1px solid var(--line);

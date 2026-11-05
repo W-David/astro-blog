@@ -28,24 +28,6 @@ function initHeader() {
 	window.addEventListener('scroll', update, { passive: true });
 }
 
-function initPointerLight() {
-	if (prefersReducedMotion()) return;
-	const glow = document.querySelector<HTMLElement>('[data-glow]');
-	if (!glow) return;
-
-	window.addEventListener(
-		'pointermove',
-		(event) => {
-			glow.style.setProperty('--mx', `${event.clientX}px`);
-			glow.style.setProperty('--my', `${event.clientY}px`);
-			glow.classList.add('is-active');
-		},
-		{ passive: true },
-	);
-
-	document.documentElement.addEventListener('mouseleave', () => glow.classList.remove('is-active'));
-}
-
 function initReveal() {
 	const nodes = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
 	if (!nodes.length) return;
@@ -95,7 +77,6 @@ export function initLumen() {
 	updateClock();
 	window.setInterval(updateClock, 30_000);
 	initHeader();
-	initPointerLight();
 	initReveal();
 	initReadingProgress();
 }

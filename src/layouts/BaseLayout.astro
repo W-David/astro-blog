@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import DotMatrixBackground from '../components/DotMatrixBackground.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 interface Props {
@@ -21,7 +22,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION, image, type = 'websi
 		<BaseHead title={title} description={description} image={image} type={type} />
 	</head>
 	<body id="top">
-		<div class="cursor-glow" data-glow aria-hidden="true"></div>
+		<DotMatrixBackground />
 		<Header />
 		<slot />
 		<Footer />

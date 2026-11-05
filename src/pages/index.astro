@@ -1,10 +1,8 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import heroImage from '../assets/images/hero-night.jpg';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const posts = (await getCollection('blog')).sort(
@@ -19,18 +17,7 @@ const yearRange = years.length ? `${Math.min(...years)}—${Math.max(...years)}`
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
 	<main>
 		<section class="hero" aria-labelledby="hero-title">
-			<div class="hero-media">
-				<Image
-					src={heroImage}
-					alt="东京中野的夜晚小巷，灯笼的暖光落在旧木门与石板路上"
-					width={1440}
-					height={1920}
-					quality={68}
-					loading="eager"
-					fetchpriority="high"
-				/>
-			</div>
-			<div class="hero-shade" aria-hidden="true"></div>
+			<div class="hero-haze" aria-hidden="true"></div>
 
 			<div class="hero-inner shell">
 				<p class="kicker">Rushing's travel of Mr.Wang · Est. 2019</p>
@@ -39,10 +26,13 @@ const yearRange = years.length ? `${Math.min(...years)}—${Math.max(...years)}`
 			</div>
 
 			<div class="hero-bottom shell">
-				<a class="scroll-cue" href="#archive">
-					<span class="scroll-line" aria-hidden="true"></span>
-					<span>Scroll to the archive</span>
-				</a>
+				<div class="hero-notes">
+					<a class="scroll-cue" href="#archive">
+						<span class="scroll-line" aria-hidden="true"></span>
+						<span>Scroll to the archive</span>
+					</a>
+					<p class="hero-hint">移动鼠标 / 滚动页面 — 扰动这片点阵</p>
+				</div>
 
 				{latest && (
 					<aside class="glass-note" aria-label="最新文章">
@@ -103,27 +93,15 @@ const yearRange = years.length ? `${Math.min(...years)}—${Math.max(...years)}`
 		padding: 0 0 42px;
 	}
 
-	.hero-media,
-	.hero-shade {
+	.hero-haze {
 		position: absolute;
 		inset: 0;
-	}
-
-	.hero-media :global(img) {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: center 42%;
-		filter: brightness(0.7) saturate(0.84) contrast(1.04);
-		transform: scale(1.02);
-	}
-
-	.hero-shade {
+		pointer-events: none;
 		background:
-			linear-gradient(90deg, rgba(8, 9, 13, 0.62) 0%, rgba(8, 9, 13, 0.2) 44%, rgba(8, 9, 13, 0) 74%),
-			radial-gradient(900px 700px at 76% 18%, rgba(255, 184, 140, 0.2), transparent 62%),
-			radial-gradient(760px 620px at 10% 76%, rgba(138, 231, 255, 0.08), transparent 60%),
-			linear-gradient(180deg, rgba(8, 9, 13, 0.62) 0%, rgba(8, 9, 13, 0.08) 34%, rgba(8, 9, 13, 0.86) 100%);
+			radial-gradient(900px 620px at 69% 33%, rgba(255, 184, 140, 0.12), transparent 66%),
+			radial-gradient(760px 560px at 18% 78%, rgba(138, 231, 255, 0.06), transparent 64%),
+			linear-gradient(90deg, rgba(8, 9, 13, 0.62) 0%, rgba(8, 9, 13, 0.16) 48%, rgba(8, 9, 13, 0) 76%),
+			linear-gradient(180deg, rgba(8, 9, 13, 0.32) 0%, transparent 28%, rgba(8, 9, 13, 0.74) 100%);
 	}
 
 	.hero-inner {
@@ -171,6 +149,20 @@ const yearRange = years.length ? `${Math.min(...years)}—${Math.max(...years)}`
 		justify-content: space-between;
 		gap: 40px;
 		margin-top: 70px;
+	}
+
+	.hero-notes {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.hero-hint {
+		margin: 0;
+		color: rgba(243, 239, 230, 0.34);
+		font-size: 8px;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
 	}
 
 	.scroll-cue {
