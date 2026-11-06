@@ -2,18 +2,18 @@
 
 Personal Astro blog for [rushwang.blog](https://rushwang.blog).
 
-**Theme: Lumen** — a dark, cinematic editorial layout with a live WebGL fluid-gradient background, large-scale typography, and a poster-style article archive.
+**Theme: Lumen** — a dark, cinematic editorial layout with a live WebGL dot-matrix background, large-scale typography, and a poster-style article archive.
 
-![Lumen theme — fluid background](preview.jpg)
+![Lumen theme — dot matrix and fluid pointer distortion](preview.jpg)
 
-[观看流体背景动图](fluid-preview.gif)
+[观看点阵背景动图](dot-matrix-preview.gif)
 
 ## Stack
 
 - Astro 7 content collections + Markdown
 - `astro:assets` for optimized local images
 - Local fonts registered with Astro's `fontProviders.local()` (Space Grotesk + Fraunces)
-- Custom WebGL2 fluid shader (fractal noise + pointer flowmap + scroll deformation)
+- Custom WebGL2 dot-matrix shader (perspective grid, ambient waves, pointer fluid vortex)
 - Vanilla TypeScript for scroll reveals, header state, and reading progress
 - RSS + sitemap enabled
 
@@ -33,13 +33,13 @@ src/
 ├── assets/
 │   ├── fonts/          # local webfonts
 │   └── images/         # post cover photography
-├── components/         # header, footer, post cards, fluid canvas
+├── components/         # header, footer, post cards, dot-matrix canvas
 ├── content/blog/       # Markdown posts
 ├── layouts/            # BaseLayout + BlogPost
 ├── pages/              # home, archive, about, dynamic posts, RSS
 ├── scripts/
 │   ├── lumen.ts        # header, reveal, reading progress
-│   └── fluid-background.js  # WebGL2 fluid renderer
+│   └── dot-matrix.ts   # WebGL2 dot field + pointer vortex
 └── styles/global.css   # Lumen design system
 ```
 
@@ -47,12 +47,12 @@ src/
 
 Posts live in `src/content/blog`. Each post can declare a local `heroImage` in frontmatter; the image is automatically optimized at build time and used both in the poster archive and on the article page.
 
-Photography is sourced from Unsplash and committed locally. The homepage uses the moving fluid field as its opening image; photography remains in the article covers and the About page.
+Photography is sourced from Unsplash and committed locally. The homepage uses the moving dot field as its opening image; photography remains in the article covers and the About page.
 
-## DeepSeek fluid reference
+## Dot-matrix background
 
-The background follows the DeepSeek homepage fluid-gradient effect and is adapted from the MIT-licensed [Deepseek新版官网Background组件](https://github.com/zhiyingpan-dev/deepseek_background) by panzhiying-dev. The original renderer uses a WebGL2 fragment shader with fractal noise, a low-resolution pointer flowmap, and glassmorphism-friendly motion.
+The field is built from a perspective grid of GPU points. Ambient waves animate continuously; moving the pointer creates a local fluid vortex with moderate displacement and a soft glow. The page scroll is intentionally **not** wired to the field, so scrolling only moves the page content and never triggers a particle disturbance.
 
-The implementation here keeps the pointer influence deliberately subtle, adds a scroll-driven deformation, respects `prefers-reduced-motion`, and falls back to a static blue gradient when WebGL2 is unavailable.
+The interaction is inspired by point-field and fluid studies such as [DeepSeek's dot-matrix whale wallpaper](https://github.com/HeShen-1/deepseek-whale-wallpaper), [WebGL Water](https://madebyevan.com/webgl-water/), and [three.js `webgl_points_waves`](https://threejs.org/examples/#webgl_points_waves). The shader is a dependency-free implementation tuned to the site's warm/cool Lumen palette.
 
-Related reading: [DeepSeek's Homepage Polish Comes Down to Three Techniques](https://guibai.dev/a/7676826408547958793/).
+It respects `prefers-reduced-motion` and falls back to a static CSS dot field when WebGL2 is unavailable.

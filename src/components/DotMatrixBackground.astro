@@ -1,0 +1,12 @@
+---
+// Full-viewport WebGL dot field. The canvas is decorative; content stays above it.
+---
+
+<canvas class="dot-matrix" data-dot-matrix aria-hidden="true"></canvas>
+<div class="dot-matrix-fallback" aria-hidden="true"></div>
+
+<script>
+	import { initDotMatrix } from '../scripts/dot-matrix';
+
+	initDotMatrix();
+</script>
