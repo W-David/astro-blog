@@ -24,7 +24,20 @@ npm install
 npm run dev
 npm run build
 npm run preview
+npm run test:e2e
+npm run test:e2e:ui
 ```
+
+## Testing
+
+Playwright uses the installed Google Chrome (`channel: "chrome"`), so no extra browser download is required on this Mac.
+
+```bash
+npm run test:e2e        # 12 pages × desktop/mobile + interaction checks
+npm run test:e2e:ui     # interactive Playwright UI
+```
+
+The suite covers page status, titles, H1 count, WebGL availability, horizontal overflow, navigation, console/runtime errors, pointer ripple generation, and verifies that scrolling does not create new ripples.
 
 ## Structure
 
@@ -37,6 +50,7 @@ src/
 ├── content/blog/       # Markdown posts
 ├── layouts/            # BaseLayout + BlogPost
 ├── pages/              # home, archive, about, dynamic posts, RSS
+├── tests/               # Playwright end-to-end suite
 ├── scripts/
 │   ├── lumen.ts        # header, reveal, reading progress
 │   └── dot-matrix.ts   # WebGL2 dot field + trailing pointer ripples

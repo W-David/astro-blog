@@ -221,6 +221,7 @@ export function initDotMatrix() {
 	const trailAges = new Float32Array(MAX_TRAIL);
 	const trailAmps = new Float32Array(MAX_TRAIL);
 	let trailCursor = 0;
+	let trailSerial = 0;
 
 	const resize = () => {
 		const rect = canvas.getBoundingClientRect();
@@ -275,6 +276,7 @@ export function initDotMatrix() {
 				amp: Math.min(0.32, 0.13 + distance * 2.2),
 			};
 			trailCursor = (trailCursor + 1) % MAX_TRAIL;
+			trailSerial += 1;
 		}
 	};
 
@@ -287,6 +289,16 @@ export function initDotMatrix() {
 	const resizeObserver = new ResizeObserver(() => resize());
 	resizeObserver.observe(canvas);
 	resize();
+
+	const debugApi = {
+		get pointerForce() {
+			return pointerForce;
+		},
+		get trailSerial() {
+			return trailSerial;
+		},
+	};
+	(window as Window & { __dotMatrix?: typeof debugApi }).__dotMatrix = debugApi;
 
 	let frame = 0;
 	const render = (now: number) => {
