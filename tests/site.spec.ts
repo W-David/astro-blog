@@ -19,7 +19,11 @@ async function collectConsoleErrors(page: Page) {
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
 	page.on('console', (message) => {
-		if (message.type() === 'error') errors.push(`console: ${message.text()}`);
+		if (message.type() !== 'error') return;
+		const text = message.text();
+		// Aborted image/preload requests during teardown are not app runtime errors.
+		if (/ERR_CONNECTION_RESET|ERR_ABORTED|ERR_FAILED/.test(text)) return;
+		errors.push(`console: ${text}`);
 	});
 	return errors;
 }
@@ -83,4 +87,23 @@ test('mouse movement produces a trailing pointer ripple and scroll does not add 
 	});
 
 	expect(afterScroll).toBe(serialBeforeScroll);
+});
+
+test('dot matrix fills the stage below the header', async ({ page }) => {
+	await page.goto('/');
+	const bounds = await page.evaluate(() => {
+		const canvas = document.querySelector('[data-dot-matrix]')?.getBoundingClientRect();
+		const header = document.querySelector('.site-header')?.getBoundingClientRect();
+		return {
+			canvas: canvas ? { top: canvas.top, bottom: canvas.bottom, left: canvas.left, width: canvas.width } : null,
+			headerBottom: header ? header.bottom : 0,
+			viewportHeight: window.innerHeight,
+		};
+	});
+
+	expect(bounds.canvas).not.toBeNull();
+	expect(bounds.canvas!.top).toBeGreaterThanOrEqual(bounds.headerBottom - 1);
+	expect(bounds.canvas!.bottom).toBeGreaterThanOrEqual(bounds.viewportHeight - 1);
+	expect(bounds.canvas!.left).toBe(0);
+	expect(bounds.canvas!.width).toBeGreaterThanOrEqual(await page.evaluate(() => window.innerWidth) - 1);
 });

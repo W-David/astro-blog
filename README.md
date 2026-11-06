@@ -37,7 +37,7 @@ npm run test:e2e        # 12 pages × desktop/mobile + interaction checks
 npm run test:e2e:ui     # interactive Playwright UI
 ```
 
-The suite covers page status, titles, H1 count, WebGL availability, horizontal overflow, navigation, console/runtime errors, pointer ripple generation, and verifies that scrolling does not create new ripples.
+The suite covers page status, titles, H1 count, WebGL availability, horizontal overflow, navigation, console/runtime errors, full-stage canvas bounds, pointer ripple generation, and verifies that scrolling does not create new ripples.
 
 ## Structure
 
@@ -65,7 +65,7 @@ Photography is sourced from Unsplash and committed locally. The homepage uses th
 
 ## Dot-matrix background
 
-The field is built from a perspective grid of GPU points. Ambient waves animate continuously; moving the pointer leaves a soft trail of small, expanding ripples behind the cursor. The page scroll is intentionally **not** wired to the field, so scrolling only moves the page content and never triggers a particle disturbance.
+The field is built from a full-stage grid of GPU points below the fixed title bar. Ambient waves animate continuously; moving the pointer leaves a soft trail of small, expanding ripples behind the cursor. The page scroll is intentionally **not** wired to the field, so scrolling only moves the page content and never triggers a particle disturbance.
 
 The interaction is inspired by point-field and fluid studies such as [DeepSeek's dot-matrix whale wallpaper](https://github.com/HeShen-1/deepseek-whale-wallpaper), [WebGL Water](https://madebyevan.com/webgl-water/), and [three.js `webgl_points_waves`](https://threejs.org/examples/#webgl_points_waves). The shader is a dependency-free implementation tuned to the site's warm/cool Lumen palette.
 

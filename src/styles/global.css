@@ -11,6 +11,7 @@
 	--line: rgba(243, 239, 230, 0.14);
 	--line-soft: rgba(243, 239, 230, 0.075);
 	--shell: 1480px;
+	--topbar: 76px;
 	--gutter: clamp(22px, 4.2vw, 64px);
 	--ease: cubic-bezier(0.22, 0.61, 0.24, 1);
 	--sans: var(--font-space-grotesk), "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
@@ -241,7 +242,10 @@ td {
 	align-items: center;
 	gap: 34px;
 	padding: 22px var(--gutter);
-	border-bottom: 1px solid transparent;
+	border-bottom: 1px solid var(--line-soft);
+	background: rgba(8, 9, 13, 0.76);
+	-webkit-backdrop-filter: blur(18px) saturate(1.2);
+	backdrop-filter: blur(18px) saturate(1.2);
 	transition:
 		background 0.5s var(--ease),
 		padding 0.5s var(--ease),
@@ -383,29 +387,38 @@ td {
 /* ---------- WebGL dot matrix ---------- */
 .dot-matrix {
 	position: fixed;
-	inset: 0;
+	top: var(--topbar);
+	right: 0;
+	bottom: 0;
+	left: 0;
 	z-index: 0;
 	display: block;
-	width: 100vw;
-	height: 100vh;
+	width: 100%;
+	height: calc(100vh - var(--topbar));
+	height: calc(100svh - var(--topbar));
 	pointer-events: none;
 	opacity: 0.94;
 }
 
 .dot-matrix-vignette {
 	position: fixed;
-	inset: 0;
+	top: var(--topbar);
+	right: 0;
+	bottom: 0;
+	left: 0;
 	z-index: 0;
 	pointer-events: none;
 	background:
-		radial-gradient(ellipse at 50% 42%, transparent 0%, rgba(8, 9, 13, 0.18) 60%, rgba(8, 9, 13, 0.52) 100%),
-		linear-gradient(90deg, rgba(8, 9, 13, 0.42) 0%, rgba(8, 9, 13, 0.08) 44%, transparent 76%),
-		linear-gradient(180deg, rgba(8, 9, 13, 0.1), rgba(8, 9, 13, 0.18));
+		linear-gradient(90deg, rgba(8, 9, 13, 0.38) 0%, rgba(8, 9, 13, 0.06) 44%, transparent 76%),
+		linear-gradient(180deg, rgba(8, 9, 13, 0.18), transparent 28%, rgba(8, 9, 13, 0.26));
 }
 
 .dot-matrix-fallback {
 	position: fixed;
-	inset: 0;
+	top: var(--topbar);
+	right: 0;
+	bottom: 0;
+	left: 0;
 	z-index: 0;
 	display: block;
 	pointer-events: none;
@@ -788,6 +801,10 @@ html[data-reveal-ready="true"] [data-reveal].is-visible {
 }
 
 @media (max-width: 680px) {
+	:root {
+		--topbar: 60px;
+	}
+
 	.site-header {
 		gap: 0;
 		padding-top: 16px;

@@ -43,9 +43,9 @@ void main() {
 	float depth = uv.y;
 	float aspect = uResolution.x / uResolution.y;
 
-	float spread = mix(0.34, 1.2, pow(depth, 0.78));
-	vec2 pos = vec2((uv.x * 2.0 - 1.0) * spread, mix(0.9, -0.98, pow(depth, 1.52)));
-	float perspectiveScale = mix(0.16, 1.0, pow(depth, 1.4));
+	// Fill the full stage below the title bar: no tapered horizon or arc.
+	vec2 pos = vec2(uv.x * 2.0 - 1.0, 1.0 - uv.y * 2.0);
+	float perspectiveScale = mix(0.35, 1.0, pow(depth, 1.2));
 
 	// Slow ambient breathing keeps the field alive without reacting to page scroll.
 	float waveA = sin(uv.x * 13.0 + uTime * 0.55 + sin(uv.y * 4.5) * 1.7);
@@ -88,8 +88,8 @@ void main() {
 	}
 
 	float grain = hash21(uv * 720.0);
-	float edgeFade = smoothstep(0.0, 0.06, uv.x) * (1.0 - smoothstep(0.94, 1.0, uv.x))
-		* smoothstep(0.0, 0.06, uv.y) * (1.0 - smoothstep(0.96, 1.0, uv.y));
+	float edgeFade = smoothstep(0.0, 0.012, uv.x) * (1.0 - smoothstep(0.988, 1.0, uv.x))
+		* smoothstep(0.0, 0.012, uv.y) * (1.0 - smoothstep(0.988, 1.0, uv.y));
 	float fieldTint = smoothstep(0.02, 0.96, depth);
 
 	vec3 cool = vec3(0.26, 0.57, 1.0);
@@ -99,7 +99,7 @@ void main() {
 	base = mix(base, warm, fieldTint * 0.28);
 	vec3 color = mix(base, warm, clamp(glow * 0.38, 0.0, 1.0));
 
-	float pointSize = mix(1.8, 5.4, pow(depth, 1.8)) + grain * 1.3;
+	float pointSize = mix(1.5, 4.9, pow(depth, 1.6)) + grain * 1.3;
 	pointSize *= (1.0 + glow * 0.42);
 	gl_PointSize = pointSize * uDpr;
 	vColor = color;
