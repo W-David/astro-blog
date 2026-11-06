@@ -1,3 +1,5 @@
+const MAX_TRAIL = 10;
+
 function compileShader(gl: WebGL2RenderingContext, type: number, source: string) {
 	const shader = gl.createShader(type);
 	if (!shader) throw new Error('Unable to create shader');
@@ -23,6 +25,9 @@ uniform float uDpr;
 uniform vec2 uPointer;
 uniform float uPointerActive;
 uniform float uPointerForce;
+uniform vec2 uTrail[${MAX_TRAIL}];
+uniform float uTrailAge[${MAX_TRAIL}];
+uniform float uTrailAmp[${MAX_TRAIL}];
 
 out vec3 vColor;
 out float vAlpha;
@@ -60,12 +65,27 @@ void main() {
 	float pointerDist = length(pointerDiff);
 	vec2 radial = pointerDiff / max(pointerDist, 0.00001);
 	vec2 tangent = vec2(-radial.y, radial.x);
-	float falloff = exp(-pointerDist * pointerDist * 5.5);
+	float falloff = exp(-pointerDist * pointerDist * 6.5);
 	float swirl = sin(pointerDist * 20.0 - uTime * 2.0) * falloff * uPointerForce;
 	float radialPulse = cos(pointerDist * 17.0 - uTime * 1.45) * falloff * uPointerForce;
-	pos += vec2(tangent.x / aspect, tangent.y) * swirl * 0.12;
-	pos += vec2(radial.x / aspect, radial.y) * radialPulse * 0.04;
-	glow += falloff * uPointerActive * 0.95 + abs(swirl) * 1.4;
+	pos += vec2(tangent.x / aspect, tangent.y) * swirl * 0.045;
+	pos += vec2(radial.x / aspect, radial.y) * radialPulse * 0.016;
+	glow += falloff * uPointerActive * 0.42 + abs(swirl) * 0.55;
+
+	// Trailing ripples: recent pointer positions keep expanding softly behind
+	// the cursor, while the page scroll never feeds this field.
+	for (int i = 0; i < ${MAX_TRAIL}; i++) {
+		float amp = uTrailAmp[i];
+		if (amp <= 0.001) continue;
+		float age = max(0.0, uTrailAge[i]);
+		vec2 diff = vec2((pos.x - uTrail[i].x) * aspect, pos.y - uTrail[i].y);
+		float dist = length(diff);
+		float ring = sin(dist * 34.0 - age * 10.0);
+		float envelope = exp(-dist * dist * 8.0) * exp(-age * 1.6) * amp;
+		vec2 radialTrail = normalize(diff + vec2(0.00001, 0.00003));
+		pos += vec2(radialTrail.x / aspect, radialTrail.y) * ring * envelope * 0.026;
+		glow += max(0.0, ring) * envelope * 0.45;
+	}
 
 	float grain = hash21(uv * 720.0);
 	float edgeFade = smoothstep(0.0, 0.06, uv.x) * (1.0 - smoothstep(0.94, 1.0, uv.x))
@@ -172,6 +192,9 @@ export function initDotMatrix() {
 		pointer: gl.getUniformLocation(program, 'uPointer'),
 		pointerActive: gl.getUniformLocation(program, 'uPointerActive'),
 		pointerForce: gl.getUniformLocation(program, 'uPointerForce'),
+		trail: gl.getUniformLocation(program, 'uTrail[0]'),
+		trailAge: gl.getUniformLocation(program, 'uTrailAge[0]'),
+		trailAmp: gl.getUniformLocation(program, 'uTrailAmp[0]'),
 	};
 
 	let width = 1;
@@ -190,6 +213,14 @@ export function initDotMatrix() {
 	let lastPointerX = 0;
 	let lastPointerY = 0;
 	let lastPointerAt = 0;
+	let lastTrailAt = 0;
+
+	type Trail = { x: number; y: number; birth: number; amp: number };
+	const trails: Trail[] = Array.from({ length: MAX_TRAIL }, () => ({ x: 0, y: 0, birth: -100, amp: 0 }));
+	const trailPositions = new Float32Array(MAX_TRAIL * 2);
+	const trailAges = new Float32Array(MAX_TRAIL);
+	const trailAmps = new Float32Array(MAX_TRAIL);
+	let trailCursor = 0;
 
 	const resize = () => {
 		const rect = canvas.getBoundingClientRect();
@@ -234,6 +265,17 @@ export function initDotMatrix() {
 		targetX = nextX;
 		targetY = nextY;
 		targetActive = 1;
+
+		if (now - lastTrailAt > 48 && distance > 0.004) {
+			lastTrailAt = now;
+			trails[trailCursor] = {
+				x: nextX,
+				y: nextY,
+				birth: (now - startTime) / 1000,
+				amp: Math.min(0.32, 0.13 + distance * 2.2),
+			};
+			trailCursor = (trailCursor + 1) % MAX_TRAIL;
+		}
 	};
 
 	window.addEventListener('pointermove', onPointerMove, { passive: true });
@@ -254,6 +296,14 @@ export function initDotMatrix() {
 		pointerActive += (targetActive - pointerActive) * 0.08;
 		pointerForce *= 0.97;
 
+		for (let i = 0; i < MAX_TRAIL; i += 1) {
+			const trail = trails[i];
+			trailPositions[i * 2] = trail.x;
+			trailPositions[i * 2 + 1] = trail.y;
+			trailAges[i] = Math.max(0, time - trail.birth);
+			trailAmps[i] = trail.amp;
+		}
+
 		gl.clear(gl.COLOR_BUFFER_BIT);
 		gl.uniform2f(uniforms.resolution, width, height);
 		gl.uniform1f(uniforms.time, time);
@@ -261,6 +311,9 @@ export function initDotMatrix() {
 		gl.uniform2f(uniforms.pointer, pointerX, pointerY);
 		gl.uniform1f(uniforms.pointerActive, pointerActive);
 		gl.uniform1f(uniforms.pointerForce, pointerForce);
+		gl.uniform2fv(uniforms.trail, trailPositions);
+		gl.uniform1fv(uniforms.trailAge, trailAges);
+		gl.uniform1fv(uniforms.trailAmp, trailAmps);
 		gl.drawArrays(gl.POINTS, 0, pointCount);
 
 		if (!reducedMotion) frame = requestAnimationFrame(render);

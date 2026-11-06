@@ -13,7 +13,7 @@ Personal Astro blog for [rushwang.blog](https://rushwang.blog).
 - Astro 7 content collections + Markdown
 - `astro:assets` for optimized local images
 - Local fonts registered with Astro's `fontProviders.local()` (Space Grotesk + Fraunces)
-- Custom WebGL2 dot-matrix shader (perspective grid, ambient waves, pointer fluid vortex)
+- Custom WebGL2 dot-matrix shader (perspective grid, ambient waves, soft trailing pointer ripples)
 - Vanilla TypeScript for scroll reveals, header state, and reading progress
 - RSS + sitemap enabled
 
@@ -39,7 +39,7 @@ src/
 ├── pages/              # home, archive, about, dynamic posts, RSS
 ├── scripts/
 │   ├── lumen.ts        # header, reveal, reading progress
-│   └── dot-matrix.ts   # WebGL2 dot field + pointer vortex
+│   └── dot-matrix.ts   # WebGL2 dot field + trailing pointer ripples
 └── styles/global.css   # Lumen design system
 ```
 
@@ -51,7 +51,7 @@ Photography is sourced from Unsplash and committed locally. The homepage uses th
 
 ## Dot-matrix background
 
-The field is built from a perspective grid of GPU points. Ambient waves animate continuously; moving the pointer creates a local fluid vortex with moderate displacement and a soft glow. The page scroll is intentionally **not** wired to the field, so scrolling only moves the page content and never triggers a particle disturbance.
+The field is built from a perspective grid of GPU points. Ambient waves animate continuously; moving the pointer leaves a soft trail of small, expanding ripples behind the cursor. The page scroll is intentionally **not** wired to the field, so scrolling only moves the page content and never triggers a particle disturbance.
 
 The interaction is inspired by point-field and fluid studies such as [DeepSeek's dot-matrix whale wallpaper](https://github.com/HeShen-1/deepseek-whale-wallpaper), [WebGL Water](https://madebyevan.com/webgl-water/), and [three.js `webgl_points_waves`](https://threejs.org/examples/#webgl_points_waves). The shader is a dependency-free implementation tuned to the site's warm/cool Lumen palette.
 
